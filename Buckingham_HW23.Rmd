@@ -1,0 +1,37 @@
+---
+title: "Buckingham_HW23"
+author: "May"
+date: "10/25/2022"
+output: html_document
+---
+
+Clear R's brain
+```{r}
+rm(list=ls())
+library(dplyr)
+library(here)
+library(ggplot2)
+```
+
+Insert soil data 
+```{r}
+soil <- read.csv(here("soil_data.csv"))
+View(soil)
+```
+make a scatterplot of the soil data for the SOM_percent column
+```{r}
+ggplot(soil, aes(x = Field.Name, y = SOM_percent)) + geom_point(size =5)+
+xlab("Field Name") 
+```
+Now lets create a boxplot for the same variable
+```{r}
+ggplot(soil, aes(x = Field.Name, y = SOM_percent)) + geom_boxplot()+
+xlab("Field Name treatment") 
+
+```
+
+Now lets make a histogram of the SOM_percent
+```{r}
+ggplot(soil, aes(x = Field.Name)) + geom_histogram(binwidth = 15) + facet_wrap(~SOM_percent)
+```
+
