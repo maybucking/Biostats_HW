@@ -1,0 +1,25 @@
+---
+title: "Buckingham-HW21"
+author: "May"
+date: "10/20/2022"
+output: html_document
+---
+Clear rs brain and add packages
+
+```{r}
+rm(list=ls())
+library(dplyr)
+library(here)
+library(ggplot2)
+```
+
+Add compensation data into r and view it
+```{r}
+compensation <-read.csv(here("Data", "compensation.csv"))
+View(compensation)
+```
+Make a scatterplot of the data
+```{r}
+ggplot(compensation, aes(x = Root, y = Fruit)) + geom_point()
+```
+
