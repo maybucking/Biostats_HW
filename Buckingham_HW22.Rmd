@@ -1,0 +1,61 @@
+---
+title: "Buckingham-Chapter4"
+author: "May"
+date: "10/20/2022"
+output: html_document
+---
+
+Clear rs brain and add packages
+
+```{r}
+rm(list=ls())
+library(dplyr)
+library(here)
+library(ggplot2)
+```
+
+Add compensation data into r and view it
+```{r}
+compensation <-read.csv(here("Data", "compensation.csv"))
+View(compensation)
+```
+# Plotting basics with chapter 4!
+#here is my script
+
+#lets plot the data and add a theme at the end!
+# we can increase the size of the points by saying "size = " in the () after geom_point
+# we can modify the axis labels by adding xlab() and ylab()
+# we can add color to plots by adding "colour = whatever variable" if you wanted a variable to be shown as a shape you would put "shape" instead of "colour"
+```{r}
+ggplot(compensation, aes(x = Root, y = Fruit, colour = Grazing)) + geom_point(size = 5) + xlab("Root Biomass") +
+ylab("Fruit Production") + theme_bw()
+```
+#Now lets focus on how fuit production varies for each grazing treatment
+# we can add raw data as it own layer by 
+```{r}
+ggplot(compensation, aes(x = Grazing, y = Fruit)) + geom_boxplot() + geom_point(size = 4, colour = 'lightgrey', alpha = 0.5) +
+xlab("Grazing treatment") +
+ylab("Fruit Production") +
+theme_bw()
+```
+Now lets plot distributions by making a histogram of the fruit production
+```{r}
+ggplot(compensation, aes(x = Fruit)) + geom_histogram(bins = 10)
+ggplot(compensation, aes(x = Fruit)) + geom_histogram(binwidth = 15)
+# to make this look better we changed the binwidth and the number of bins
+
+```
+
+Now lets create a facet, or a structured matrix of graphs
+facet_wrap is used to select the treatment, and ggplot divides the data into two graphs
+
+```{r}
+ggplot(compensation, aes(x = Fruit)) + geom_histogram(binwidth = 15) + facet_wrap(~Grazing)
+```
+Now lets save the data 
+```{r}
+ggsave("ThatCoolHistogramOfFruit.png")
+```
+
+Commit 
+
