@@ -1,0 +1,59 @@
+---
+title: "Buckingham_Homework19"
+author: "May"
+date: "10/16/2022"
+output: html_document
+---
+Your data folder doesn't have any data in it, so I am unable to run your code.  Your code looks good, but I was unable to test it.
+
+
+##Homework-19
+# In this homework we will examine a data set and fix any errors within the set so that R Studio can understand it. Then we will create a new data set and a histogram using the new data set
+First we will clear the brain and add some packages. 
+```{r}
+rm(list=ls())
+library(dplyr)
+library(here)
+library(ggplot2)
+```
+
+Now we will import the dataset with stringsAsFactors = TRUE
+
+```{r}
+Leaves <- read.csv(here("Data", "Class_leaf_measurements.csv"), stringsAsFactors = TRUE)
+Leaves
+```
+Now lets examine to dataset
+```{r}
+str(Leaves)
+```
+```{r}
+names(Leaves)
+
+```
+Now lets change the column names so that there are no spaces ir special characters
+
+```{r}
+Leaves <- Leaves %>% rename(DBH_cm = DBH..cm., Leaf_num = Leaf.., Petiole_Length = Petiole.length)
+```
+Now change the species names so that there are only three possibilities, Red Maple, Sugar Maple, and Norway Maple.
+```{r}
+RedMaple <- which(Leaves$Species == "red maple", Leaves$Species == "Red maple")
+SugarMaple <- which(Leaves$Species == "Sugar maple", Leaves$Species == "sugar maple")
+NorwayMaple <- which(Leaves$Species == "Norway maple")
+```
+
+I will create a new dataset called "Sugar" by selecting only the sugar maple data from the Leaves data set
+```{r}
+Sugar <-filter(Leaves, Species == "Sugar Maple" | Species == "sugar maple")
+```
+Now I will subset the columns in Sugar using the select function to leave outthe Person, Leaf number and Tree number variables. 
+```{r}
+Sugar <-select(Sugar, -Person, -Leaf_num, -Tree_num)
+```
+Now I will create a histogram of the data in the Sugar dataset
+```{r}
+hist(Sugar$Petiole_Length, main ="Histogram of Sugar Maple Petiole Lengths")
+```
+
+
