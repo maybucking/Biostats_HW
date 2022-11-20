@@ -1,0 +1,64 @@
+---
+title: "Buckingham_HW23"
+author: "May"
+date: "10/25/2022"
+output: html_document
+---
+Your data folder in this project does not contain any data so I cannot run your code. I'm taking off 0.5 points.
+
+Your code looks good, but may not all work and I can't tell without running it.
+
+
+Clear R's brain
+```{r}
+rm(list=ls())
+library(dplyr)
+library(here)
+library(ggplot2)
+```
+
+Insert soil data 
+```{r}
+soil <- read.csv(here("soil_data.csv"))
+View(soil)
+```
+make a scatterplot of the soil data for the SOM_percent column
+```{r}
+ggplot(soil, aes(x = Field.Name, y = SOM_percent)) + geom_point(size =5)+
+xlab("Field Name") +
+ylab("Soil Organic Matter %")
+```
+Now lets create a boxplot for the same variable
+```{r}
+ggplot(soil, aes(x = "11/17", y = SOM_percent)) + geom_boxplot()+
+xlab("Date") +
+ylab("Soil Organic Matter %")
+```
+
+Now lets make a histogram of the SOM_percent
+```{r}
+ggplot(soil, aes(x = SOM_percent)) + geom_histogram(bins = 10)
+ggplot(soil, aes(x = SOM_percent)) + geom_histogram(binwidth = 15)+
+  xlab("Soil Organic Matter %")
+```
+Now lets make a scatter plot for Ca PPM at each sample site
+```{r}
+ggplot(soil, aes(x = Field.Name, y = Ca.ppm)) + geom_point(size =5)+
+xlab("Field Name") +
+ylab("Soil Calcium PPM")
+
+```
+Now lets create the box plot for this data
+```{r}
+ggplot(soil, aes(x = "11/17", y = Ca.ppm)) + geom_boxplot()+
+xlab("Date") +
+ylab("Soil Calcium PPM")
+```
+Now lets create the histogram for this data
+```{r}
+ggplot(soil, aes(x = Ca.ppm)) + geom_histogram(bins = 10)
+ggplot(soil, aes(x = Ca.ppm)) + geom_histogram(binwidth = 15)+
+  xlab("Soil Calcium PPM")
+```
+Save, commit and push to github
+
