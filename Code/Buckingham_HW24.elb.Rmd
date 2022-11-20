@@ -1,0 +1,75 @@
+---
+title: "Buckingham_HW24"
+author: "May"
+date: "10/28/2022"
+output: html_document
+---
+
+Clear R's brain
+```{r}
+rm(list=ls())
+library(dplyr)
+library(here)
+library(ggplot2)
+```
+
+This chapter will go over plotting data, building your model, checking assumptions, interpretting your model and replotting the data.
+
+Insert the data
+```{r}
+ladybirds <- read.csv("ladybirds.csv")
+ozone <- read.csv("ozone.csv")
+```
+I tried using the here function and it didnt work, so in this project do not use here i guess
+
+TWO PROBLEMS:1) YOU SHOULD BE ABLE TO USE THE HERE FUNCTION SUCCESSFULLY BY NOW OR ASKING ME FOR HELP IF YOU CANT
+2) YOU DON'T HAVE  YOUR PROJECT SET UP PROPERLY (WITH DATA FILES IN YOUR DATA FOLDER) SO I AM UNABLE TO RUN YOUR CODE.
+
+Using the ladybird data lets perform an x^2 contingency test
+First lets look at the data
+```{r}
+View(ladybirds)
+```
+
+Lets summarose the data and group habitat and colour together
+```{r}
+totals <- ladybirds %>%
+group_by(Habitat, colour) %>%
+summarise(total.number = sum(number))
+```
+Now lets make a bar chart of the data
+```{r}
+ggplot(totals, aes(x = Habitat, y = total.number, fill = colour)) +
+geom_bar(stat = 'identity', position = 'dodge')+
+scale_fill_manual(values = c(black = "black", red = "red")) # fixing th graph colours here
+```
+Now lets make an x^2 test, we need to us xtabs to do cross tabulation
+```{r}
+lady.mat <- xtabs(number ~ Habitat + colour, data = ladybirds)
+lady.mat
+```
+Now the test
+```{r}
+chisq.test(lady.mat)
+```
+Now lets work with ozone
+```{r}
+View(ozone)
+```
+
+Lets plot the data as a histogram
+```{r}
+ggplot(ozone, aes(x = Ozone)) + geom_histogram(binwidth = 10) + facet_wrap(~ Garden.location, ncol = 1) + theme_bw()
+
+```
+ This histogram provides visual representations of the distributions of the data in each sample
+Its easy to compare them
+
+Lets do a t-test
+```{r}
+t.test(Ozone ~ Garden.location, data = ozone)
+```
+Save and commit this
+
+WHAT DID YOU LEARN FROM EACH OF THE STATISTICAL TESTS? IT WOULD BE GOOD TO MAKE NOTES THAT SHOW THAT YOU WERE DOING THE READING TO UNDERSTAND WHAT THE PURPOSE OF DIFFERENT BITS OF CODE OR OUTPUT HAVE.
+
