@@ -1,0 +1,107 @@
+---
+title: "Buckingham_HW25"
+author: "May"
+date: "11/1/2022"
+output: html_document
+---
+
+Clear R's brain
+```{r}
+rm(list=ls())
+library(dplyr)
+library(here)
+library(ggplot2)
+```
+
+Insert the data and view it
+```{r}
+plantgr <- read.csv("plant.growth.rate.csv")
+glimpse(plantgr)
+```
+This shows there are 2 variables, lets make a scatterplot to show this
+```{r}
+ggplot(plantgr, aes(x = soil.moisture.content, y = plant.growth.rate)) +
+  geom_point() +
+  ylab("Plant Growth Rate (mm/week)") + theme_bw()
+```
+Lets interpret this, the gradient is positive, the more moisture in the soil, the higher the plant growth rate.
+
+Lets make a simple linear regression
+```{r}
+modelpgr <- lm(plant.growth.rate ~ soil.moisture.content, data = plantgr)
+```
+ Lets make diagnostic plots
+```{r}
+library(ggfortify)
+autoplot(modelpgr, smooth.colour = NA)
+```
+nice
+Top right:
+it tells us whether a line is appropriate to fit to the data
+Top Left:
+This evaluates the assumption of normality of the residuals
+Bottom right:
+This evaluates the assumption of equal variance.
+Bottom Left:
+Evaluates leverege and detects outliers
+
+Lets use anova() to produce the sums of squares table
+```{r}
+anova(modelpgr)
+```
+Now the summary table
+```{r}
+summary(modelpgr)
+
+```
+Lets put this back into our figure of the raw data
+```{r}
+ggplot(plantgr, aes(x = soil.moisture.content, y = plant.growth.rate)) +
+geom_point() +
+geom_smooth(method = 'lm') + ylab("Plant Growth Rate (mm/week)") + theme_bw()
+  
+```
+
+Lets get a new dataset
+```{r}
+daphnia <-read.csv("Daphniagrowth.csv")
+glimpse(daphnia)
+```
+Lets make a boxplot of the data in this set
+```{r}
+ggplot(daphnia, aes(x = parasite, y = growth.rate)) + geom_boxplot() +
+theme_bw()
+```
+Now lets switch the coordinates
+```{r}
+ggplot(daphnia, aes(x = parasite, y = growth.rate)) + geom_boxplot() +
+theme_bw() +
+coord_flip()
+```
+Now lets create a linear regression model
+```{r}
+model_grow <- lm(growth.rate ~ parasite, data = daphnia)
+```
+
+lets plot the four diagnostic graphs
+```{r}
+autoplot(model_grow, smooth.colour = NA)
+
+```
+lets do anova() on this
+```{r}
+anova(model_grow)
+```
+Now summarize it
+```{r}
+summary(model_grow)
+```
+Save and commit to git hub
+
+ AS PER EARLIER HOMEWORKS, I DON'T HAVE ANY OF THE DATA IN YOUR CODE FOLDER. 
+ 
+ THIS LOOKS OK, BUT I'D LIKE TO SEE MORE OF AN EXPLANATION FOR THINGS - FOR INSTANCE, ON THE ANOVA, HOW DO YOU INTERPRET THE AUTOPLOT BOXES?
+  
+HOW DO YOU INTERPRET THE ANOVA?  WHAT DO YOU NEED TO LOOK AT TO MAKE A DECISION?
+
+
