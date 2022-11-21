@@ -1,0 +1,252 @@
+---
+title: "Buckingham_HW27"
+author: "May"
+date: "11/13/2022"
+output: html_document
+---
+
+Chapter 2 
+```{r}
+library(ggplot2)
+mpg
+```
+lets do 5 functions to get more info about the dataset
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy)) + 
+  geom_point()
+```
+These plots show a correlation, as engine size increases, mileage decreases.
+
+Make a boxplot for year and mpg for city driving
+```{r}
+ggplot(mpg, aes(x = year, y = cty)) + geom_boxplot()
+
+```
+
+```{r}
+summary(mpg)
+```
+```{r}
+ggplot(mpg, aes(cty, hwy)) + geom_point()
+```
+```{r}
+ggplot(diamonds, aes(carat, price)) + geom_point()
+```
+Scatter plot
+
+```{r}
+ggplot(economics, aes(date, unemploy)) + geom_line()
+```
+Very cool line graph!
+
+```{r}
+ggplot(mpg, aes(cty)) + geom_histogram()
+```
+histogram
+
+Now to add color, shape, and other aesthetic attributes
+```{r}
+aes(displ, hwy, colour = class) # you include it within the parenthesis after aes
+```
+```{r}
+aes(displ, hwy, shape = drv)
+```
+```{r}
+aes(displ, hwy, size = cyl)
+```
+```{r}
+ggplot(mpg, aes(displ, hwy, colour = class)) + 
+  geom_point() # you can use aesthetic to add outlying variables to the graph, in this examples were using color to ass class variable
+```
+To set an aesthetic to a fixed value, without scaling it, do so in the individual layer outside of aes()
+```{r}
+ggplot(mpg, aes(displ, hwy)) + geom_point(aes(colour = "blue"))
+ggplot(mpg, aes(displ, hwy)) + geom_point(colour = "blue")
+```
+```{r}
+ggplot(mpg, aes(displ, hwy)) + 
+  geom_point() + 
+  facet_wrap(~class)
+```
+
+```{r}
+geom_smooth()
+```
+
+```{r}
+ggplot(mpg, aes(displ, hwy)) + 
+  geom_point() + 
+  geom_smooth() # adds a smoother line to the plot
+```
+
+```{r}
+ggplot(mpg, aes(displ, hwy)) + 
+  geom_point() + 
+  geom_smooth(span = 0.2) # span meeter controls the wiggliness of a line
+```
+
+```{r}
+ggplot(mpg, aes(displ, hwy)) + 
+  geom_point() + 
+  geom_smooth(span = 1) # bigger number = more smooth
+```
+
+```{r}
+ggplot(mpg, aes(displ, hwy)) + 
+  geom_point() + 
+  geom_smooth(span = 2)
+```
+
+```{r}
+library(mgcv)
+ggplot(mpg, aes(displ, hwy)) + 
+  geom_point() + 
+  geom_smooth(method = "gam", formula = y ~ s(x)) # gam fits a generalised additive model
+```
+
+```{r}
+ggplot(mpg, aes(displ, hwy)) + 
+  geom_point() + 
+  geom_smooth(method = "lm") #lm fits a linear model
+```
+
+```{r}
+ggplot(mpg, aes(drv, hwy)) + 
+  geom_point()
+```
+this causes a lot of overplotting
+
+Jittering, geom_jitter(), adds a little random noise to the data which can help avoid overplotting.
+
+Boxplots, geom_boxplot(), summarise the shape of the distribution with a handful of summary statistics.
+
+Violin plots, geom_violin(), show a compact representation of the “density” of the distribution, highlighting the areas where more points are found.
+
+```{r}
+ggplot(mpg, aes(drv, hwy)) + geom_jitter()
+ggplot(mpg, aes(drv, hwy)) + geom_boxplot()
+ggplot(mpg, aes(drv, hwy)) + geom_violin()
+```
+
+histograms
+
+```{r}
+ggplot(mpg, aes(hwy)) + geom_histogram() #bars
+ggplot(mpg, aes(hwy)) + geom_freqpoly() #lines
+```
+
+```{r}
+# it is good to test out different bin widths before choosing
+ggplot(mpg, aes(hwy)) + 
+  geom_freqpoly(binwidth = 2.5)
+ggplot(mpg, aes(hwy)) + 
+  geom_freqpoly(binwidth = 1)
+```
+
+```{r}
+# adding color is helpful in comparing distributions
+ggplot(mpg, aes(displ, colour = drv)) + 
+  geom_freqpoly(binwidth = 0.5)
+ggplot(mpg, aes(displ, fill = drv)) + 
+  geom_histogram(binwidth = 0.5) + 
+  facet_wrap(~drv, ncol = 1)
+```
+Bar charts
+
+```{r}
+ggplot(mpg, aes(manufacturer)) + 
+  geom_bar()
+```
+
+```{r}
+drugs <- data.frame(
+  drug = c("a", "b", "c"),
+  effect = c(4.2, 9.7, 6.1))
+```
+
+```{r}
+ggplot(drugs, aes(drug, effect)) + geom_bar(stat = "identity")
+ggplot(drugs, aes(drug, effect)) + geom_point()
+
+```
+```{r}
+ggplot(economics, aes(date, unemploy / pop)) +
+  geom_line()
+ggplot(economics, aes(date, uempmed)) +
+  geom_line()
+```
+
+Now to draw both the series in the same plot
+We'll do this by froming a path plot
+We'll plot unemployment rate vs. length of unemployment and join the individual observations with a path. In the second plot, we color the points to make it easier to see the direction of time.
+```{r}
+ggplot(economics, aes(unemploy / pop, uempmed)) + 
+  geom_path() +
+  geom_point()
+
+year <- function(x) as.POSIXlt(x)$year + 1900
+ggplot(economics, aes(unemploy / pop, uempmed)) + 
+  geom_path(colour = "grey50") +
+  geom_point(aes(colour = year(date)))
+```
+
+xlab() and ylab() modify the x- and y-axis labels:
+```{r}
+ggplot(mpg, aes(cty, hwy)) +
+  geom_point(alpha = 1 / 3)
+
+ggplot(mpg, aes(cty, hwy)) +
+  geom_point(alpha = 1 / 3) + 
+  xlab("city driving (mpg)") + 
+  ylab("highway driving (mpg)")
+
+# Remove the axis labels with NULL
+ggplot(mpg, aes(cty, hwy)) +
+  geom_point(alpha = 1 / 3) + 
+  xlab(NULL) + 
+  ylab(NULL)
+```
+xlim() and ylim() modify the limits of axes:
+```{r}
+ggplot(mpg, aes(drv, hwy)) +
+  geom_jitter(width = 0.25)
+
+ggplot(mpg, aes(drv, hwy)) +
+  geom_jitter(width = 0.25) + 
+  xlim("f", "r") + 
+  ylim(20, 30)
+#> Warning: Removed 140 rows containing missing values (geom_point).
+  
+# For continuous scales, use NA to set only one limit
+ggplot(mpg, aes(drv, hwy)) +
+  geom_jitter(width = 0.25, na.rm = TRUE) + 
+  ylim(NA, 30)
+```
+
+Output
+```{r}
+p <- ggplot(mpg, aes(displ, hwy, colour = factor(cyl))) +
+  geom_point() # create a plot
+```
+
+view it with print()
+```{r}
+print(p)
+```
+```{r}
+# Save png to disk
+ggsave("plot.png", p, width = 5, height = 5)
+```
+
+summarise it
+```{r}
+summary(p)
+```
+
+save a copy 
+```{r}
+saveRDS(p, "plot.rds")
+q <- readRDS("plot.rds")
+```
+
+LIKE WITH HW 24 AND 25, I CAN SEE YOUR CODE, BUT THERE IS NOT MUCH BETWEEN CODE BLOCKS TO SHOW ME THAT YOU ARE THINKING ABOUT WHAT YOU'RE DOING.
